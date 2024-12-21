@@ -24,3 +24,10 @@ class Deployment(Base):
     
     # Relationships
     cluster = relationship("Cluster", back_populates="deployments")
+
+    def is_sufficient_resources(self):
+        return (
+                self.cluster.cpu_available >= self.cpu_required and
+                self.cluster.ram_available >= self.ram_required and
+                self.cluster.gpu_available >= self.gpu_required
+        )

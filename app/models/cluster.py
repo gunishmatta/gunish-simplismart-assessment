@@ -1,5 +1,6 @@
+from fastapi import HTTPException
 from sqlalchemy import Column, Integer, String, Float, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, validates
 from app.db.base_class import Base
 
 class Cluster(Base):
@@ -20,3 +21,34 @@ class Cluster(Base):
     # Relationships
     organization = relationship("Organization", back_populates="clusters")
     deployments = relationship("Deployment", back_populates="cluster")
+
+    def __repr__(self):
+        return f"<Cluster(name={self.name}, cpu_limit={self.cpu_limit}, ram_limit={self.ram_limit}, gpu_limit={self.gpu_limit})>"
+
+
+    # Validation for cpu_available
+    @validates("cpu_available")
+    def validate_cpu_available(self, key, value):
+        if value < 0:
+            raise HTTPException(status_code=400, detail="CPU available cannot be negative.")
+        if value > self.cpu_limit:
+            raise HTTPException(status_code=400, detail="Requested CPU exceeds the resource limit.")
+        return value
+
+    # Validation for ram_available
+    @validates("ram_available")
+    def validate_ram_available(self, key, value):
+        if value < 0:
+            raise HTTPException(status_code=400, detail="RAM available cannot be negative.")
+        if value > self.ram_limit:
+            raise HTTPException(status_code=400, detail="Requested RAM exceeds the resource limit.")
+        return value
+
+    # Validation for gpu_available
+    @validates("gpu_available")
+    def validate_gpu_available(self, key, value):
+        if value < 0:
+            raise HTTPException(status_code=400, detail="GPU available cannot be negative.")
+        if value > self.gpu_limit:
+            raise HTTPException(status_code=400, detail="Requested GPU exceeds the resource limit.")
+        return value

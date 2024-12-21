@@ -2,12 +2,13 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 from app.core import deps
-from app.schemas.organization import Organization, OrganizationCreate
+from app.models.organization import Organization
 from app.models.user import User
+from app.schemas.organizationresponse import OrganizationCreate, OrganizationResponse
 
 router = APIRouter()
 
-@router.post("/", response_model=Organization)
+@router.post("/", response_model=OrganizationResponse)
 def create_organization(
     *,
     db: Session = Depends(deps.get_db),
@@ -17,7 +18,12 @@ def create_organization(
     """
     TODO: Implement organization creation
     """
-    pass
+    name = organization_in.name
+    existing_org = db.query(Organization).filter(Organization.name == name).first()
+    if existing_org:
+        raise HTTPException(status_code=400, detail="Organization with this name already exists.")
+
+
 
 @router.post("/{invite_code}/join")
 def join_organization(
@@ -29,4 +35,15 @@ def join_organization(
     """
     TODO: Implement organization joining logic
     """
-    pass
+    organization = db.query(Organization).filter(Organization.invite_code == invite_code).first()
+
+    if not organization:
+        raise HTTPException(status_code=404, detail="Organization not found")
+
+    if current_user.organization_id is not None:
+        raise HTTPException(status_code=400, detail="User is already a member of an organization")
+
+    current_user.organization_id = organization.id
+    db.commit()
+    db.refresh(current_user)
+    return organization

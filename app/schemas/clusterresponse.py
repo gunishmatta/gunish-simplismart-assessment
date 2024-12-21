@@ -13,7 +13,7 @@ class ClusterCreate(ClusterBase):
 class ClusterUpdate(ClusterBase):
     pass
 
-class Cluster(ClusterBase):
+class ClusterResponse(ClusterBase):
     id: int
     organization_id: int
     cpu_available: float

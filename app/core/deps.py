@@ -1,4 +1,4 @@
-from typing import Generator, Optional
+from typing import Generator, Optional, Type
 from fastapi import Depends, HTTPException, status, Request
 from sqlalchemy.orm import Session
 from app.db.session import SessionLocal
@@ -14,7 +14,7 @@ def get_db() -> Generator:
 async def get_current_user(
     request: Request,
     db: Session = Depends(get_db)
-) -> Optional[User]:
+) -> Type[User]:
     """
     TODO: Implement current user validation from session
     Example:
