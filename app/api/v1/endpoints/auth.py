@@ -1,8 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Response, Request
+from fastapi import (APIRouter, Depends, HTTPException, Request, Response,
+                     status)
 from sqlalchemy.orm import Session
+
 from app.core import deps, security
-from app.schemas.user import UserCreate, User
 from app.models.user import User as UserModel
+from app.schemas.auth import LoginRequest
+from app.schemas.user import User, UserCreate
 
 router = APIRouter()
 
@@ -10,8 +13,7 @@ router = APIRouter()
 @router.post("/login")
 async def login(request: Request,
                 response: Response,
-                username: str,
-                password: str,
+                body: LoginRequest,
                 db: Session = Depends(deps.get_db)):
     """
     TODO: Implement login endpoint using session
@@ -21,9 +23,10 @@ async def login(request: Request,
     - Set user_id in session
     - Return success message
     """
+    username = body.username
+    password = body.password
     user = db.query(UserModel).filter(UserModel.username == username).first()
-    if not user or not security.verify_password(
-            password, security.get_password_hash(password)):
+    if not user or not security.verify_password(password, user.hashed_password):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail="Invalid username or password")
     request.session["user_id"] = user.id

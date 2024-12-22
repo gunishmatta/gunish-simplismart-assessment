@@ -1,11 +1,11 @@
 from typing import Type
 
-from sqlalchemy.orm import Session
 from fastapi import HTTPException
+from sqlalchemy.orm import Session
 
 from app.core.scheduling.preemption_factory import PreemptionSchedulingFactory
 from app.models.cluster import Cluster
-from app.schemas.deployment import DeploymentCreate, Deployment
+from app.schemas.deployment import Deployment, DeploymentCreate
 
 
 class DeploymentService:

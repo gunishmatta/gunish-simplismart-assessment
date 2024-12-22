@@ -1,8 +1,11 @@
 from typing import Generator, Optional, Type
-from fastapi import Depends, HTTPException, status, Request
+
+from fastapi import Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
+
 from app.db.session import SessionLocal
 from app.models.user import User
+
 
 def get_db() -> Generator:
     db = SessionLocal()

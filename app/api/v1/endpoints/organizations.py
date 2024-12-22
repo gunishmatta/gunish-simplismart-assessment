@@ -1,10 +1,13 @@
+from typing import List
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from typing import List
+
 from app.core import deps
 from app.models.organization import Organization
 from app.models.user import User
-from app.schemas.organizationresponse import OrganizationCreate, OrganizationResponse
+from app.schemas.organizationresponse import (OrganizationCreate,
+                                              OrganizationResponse)
 
 router = APIRouter()
 

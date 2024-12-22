@@ -1,7 +1,10 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, Enum
-from sqlalchemy.orm import relationship
 import enum
+
+from sqlalchemy import Column, Enum, Float, ForeignKey, Integer, String
+from sqlalchemy.orm import relationship
+
 from app.db.base_class import Base
+
 
 class DeploymentStatus(enum.Enum):
     PENDING = "pending"

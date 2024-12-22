@@ -1,7 +1,9 @@
 from fastapi import HTTPException
-from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from sqlalchemy import Column, Float, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship, validates
+
 from app.db.base_class import Base
+
 
 class Cluster(Base):
     id = Column(Integer, primary_key=True, index=True)

@@ -1,6 +1,9 @@
-from pydantic import BaseModel
 from typing import Optional
+
+from pydantic import BaseModel
+
 from app.models.deployment import DeploymentStatus
+
 
 class DeploymentBase(BaseModel):
     name: str

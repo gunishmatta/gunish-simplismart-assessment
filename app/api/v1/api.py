@@ -1,5 +1,6 @@
 from fastapi import APIRouter
-from app.api.v1.endpoints import auth, organizations, clusters, deployments
+
+from app.api.v1.endpoints import auth, clusters, deployments, organizations
 
 api_router = APIRouter()
 

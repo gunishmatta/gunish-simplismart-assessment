@@ -1,11 +1,13 @@
+from typing import List
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from typing import List
+
 from app.core import deps
 from app.core.scheduling.preemption_factory import PreemptionSchedulingFactory
 from app.models.cluster import Cluster
-from app.schemas.deployment import DeploymentCreate, Deployment
 from app.models.user import User
+from app.schemas.deployment import Deployment, DeploymentCreate
 from app.service.deployment_service import DeploymentService
 
 router = APIRouter()

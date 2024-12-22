@@ -1,6 +1,8 @@
-from sqlalchemy import Boolean, Column, Integer, String, ForeignKey
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
+
 from app.db.base_class import Base
+
 
 class User(Base):
     id = Column(Integer, primary_key=True, index=True)
