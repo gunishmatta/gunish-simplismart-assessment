@@ -6,13 +6,14 @@ from sqlalchemy.orm import Session
 from app.core import deps
 from app.core.scheduling.preemption_factory import PreemptionSchedulingFactory
 from app.models.cluster import Cluster
+from app.models.deployment import Deployment
 from app.models.user import User
-from app.schemas.deployment import Deployment, DeploymentCreate
+from app.schemas.deploymentresponse import DeploymentResponse, DeploymentCreate
 from app.service.deployment_service import DeploymentService
 
 router = APIRouter()
 
-@router.post("/", response_model=Deployment)
+@router.post("/", response_model=DeploymentResponse)
 def create_deployment(
     *,
     db: Session = Depends(deps.get_db),
@@ -27,7 +28,7 @@ def create_deployment(
     deployment = deployment_service.handle_deployment(deployment_in, preemption_strategy, deployment_in.cluster_id)
     return deployment
 
-@router.get("/", response_model=List[Deployment])
+@router.get("/", response_model=List[DeploymentResponse])
 def list_deployments(
     db: Session = Depends(deps.get_db),
     current_user: User = Depends(deps.get_current_user)
@@ -42,8 +43,10 @@ def list_deployments(
             status_code=404,
             detail="No clusters found for the user's organization."
         )
+    clusters = db.query(Cluster).filter(Cluster.organization_id == current_user.organization_id).all()
 
     deployments = db.query(Deployment).filter(Deployment.cluster_id.in_([cluster.id for cluster in clusters])).all()
+
 
     if not deployments:
         raise HTTPException(

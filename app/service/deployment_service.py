@@ -5,7 +5,8 @@ from sqlalchemy.orm import Session
 
 from app.core.scheduling.preemption_factory import PreemptionSchedulingFactory
 from app.models.cluster import Cluster
-from app.schemas.deployment import Deployment, DeploymentCreate
+from app.models.deployment import Deployment, DeploymentStatus
+from app.schemas.deploymentresponse import  DeploymentCreate
 
 
 class DeploymentService:
@@ -14,7 +15,7 @@ class DeploymentService:
         self.db = db
         self.current_user = current_user
 
-    def get_cluster(self, cluster_id: int) -> Type[Cluster]:
+    def get_cluster(self, cluster_id: int):
         """Fetch the cluster from the database."""
         cluster = self.db.query(Cluster).filter(Cluster.id == cluster_id).first()
         if not cluster:
@@ -40,7 +41,7 @@ class DeploymentService:
             cluster.gpu_available += preempted_deployment.gpu_required
             self.db.commit()
 
-    def create_new_deployment(self, deployment_in: DeploymentCreate, cluster: Type[Cluster]) -> Deployment:
+    def create_new_deployment(self, deployment_in: DeploymentCreate, cluster) -> Deployment:
         """Create and return a new deployment."""
         deployment = Deployment(
             name=deployment_in.name,
@@ -48,9 +49,14 @@ class DeploymentService:
             ram_required=deployment_in.ram_required,
             gpu_required=deployment_in.gpu_required,
             cluster_id=cluster.id,
-            status="Pending",
-            priority=deployment_in.priority
+            status=DeploymentStatus.PENDING.name,
+            priority=deployment_in.priority,
+            docker_image=deployment_in.docker_image
         )
+
+        self.db.add(deployment)
+        self.db.commit()
+        self.db.refresh(deployment)
         return deployment
 
     def update_cluster_resources(self, deployment: Deployment, cluster: Type[Cluster]):

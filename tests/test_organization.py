@@ -4,7 +4,6 @@ from starlette.testclient import TestClient
 from app.core.security import get_password_hash
 from app.models.organization import Organization as OrganizationModel
 from app.models.user import User as UserModel
-from app.schemas.organizationresponse import OrganizationCreate
 
 
 def create_user(db: Session, username: str, email: str, password: str) -> UserModel:
@@ -85,7 +84,7 @@ def test_join_organization_invalid_invite_code(client: TestClient, db: Session):
 
 
 def test_join_organization_already_member(client: TestClient, db: Session):
-	user = create_user(db, "testuser", "testuser@example.com", "password123")
+	create_user(db, "testuser", "testuser@example.com", "password123")
 	cookies = login_user(client, "testuser", "password123")
 	organization = create_organization(db, "Test Organization", "invite123")
 

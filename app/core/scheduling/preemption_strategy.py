@@ -4,7 +4,7 @@ from typing import Any, Dict
 from sqlalchemy.orm import Session
 
 from app.models.cluster import Cluster
-from app.schemas.deployment import DeploymentCreate
+from app.schemas.deploymentresponse import DeploymentCreate
 
 
 class PreemptionStrategy(ABC):

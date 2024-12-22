@@ -19,7 +19,7 @@ class DeploymentCreate(DeploymentBase):
 class DeploymentUpdate(DeploymentBase):
     pass
 
-class Deployment(DeploymentBase):
+class DeploymentResponse(DeploymentBase):
     id: int
     cluster_id: int
     status: DeploymentStatus
