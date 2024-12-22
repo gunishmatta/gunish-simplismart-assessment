@@ -8,7 +8,7 @@ from app.core.scheduling.preemption_factory import PreemptionSchedulingFactory
 from app.models.cluster import Cluster
 from app.models.deployment import Deployment
 from app.models.user import User
-from app.schemas.deploymentresponse import DeploymentResponse, DeploymentCreate
+from app.schemas.deploymentresponse import DeploymentCreate, DeploymentResponse
 from app.service.deployment_service import DeploymentService
 
 router = APIRouter()

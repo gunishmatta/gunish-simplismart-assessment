@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from app.core.scheduling.preemption_factory import PreemptionSchedulingFactory
 from app.models.cluster import Cluster
 from app.models.deployment import Deployment, DeploymentStatus
-from app.schemas.deploymentresponse import  DeploymentCreate
+from app.schemas.deploymentresponse import DeploymentCreate
 
 
 class DeploymentService:

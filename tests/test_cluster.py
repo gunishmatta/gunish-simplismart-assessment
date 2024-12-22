@@ -3,7 +3,8 @@ from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
 from app.models.cluster import Cluster
-from tests.test_organization import create_organization, create_user, login_user
+from tests.test_organization import (create_organization, create_user,
+                                     login_user)
 
 
 @pytest.fixture

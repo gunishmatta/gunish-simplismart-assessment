@@ -148,3 +148,54 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 - Use appropriate error handling throughout
 - Document your design decisions
 - Consider edge cases in your implementation
+
+**App Design**
+
+The design of the application is structured around modular components that facilitate easy scalability and testing. The main components include:
+
+1. Services Layer (deployment_service.py)
+The core logic for handling deployments is implemented here. This layer is responsible for:
+Creating, updating, and scheduling deployments.
+Managing deployment preemption based on different strategies (e.g., Priority Preemption).
+Applying resource changes to clusters based on deployment requests.
+2. Models Layer (models)
+Represents the structure of the data in the database, such as clusters and deployments.
+Models interact with the database via SQLAlchemy ORM.
+Example models include Cluster, Deployment, and User.
+3. Schemas Layer (schemas)
+Defines the Pydantic models used for request validation and response formatting.
+Includes models like DeploymentCreate, DeploymentUpdate, and Deployment.
+4. API Layer (main.py)
+This is where the FastAPI application is defined, including the routing for different endpoints (e.g., for deployment creation, cluster status checking).
+The application uses dependency injection to manage database sessions and user authentication.
+5. Preemption Strategies (preemption_strategy.py)
+Defines different strategies for preempting existing deployments to make room for new ones, based on user-defined priorities or other criteria.
+Testing Design
+The app follows a test-driven development approach, with all core functionalities being tested. Unit tests are used to verify the behavior of individual components, while integration tests ensure that the system works as expected end-to-end.
+
+Tests are written using the pytest framework and are structured into the following categories:
+
+Unit Tests: For testing individual service methods and preemption strategies.
+API endpoints are covered using TestClient from FastAPI.
+
+**Instructions to Run the App with Docker**
+
+To run this app inside a Docker container, follow the steps below.
+
+Prerequisites
+* Docker installed on your machine.
+* Docker Compose
+
+
+**Clone the Repository**
+Clone the repository to your local machine:
+`git clone <repo_url>`
+`cd your-repository-directory`
+
+To run the application using Docker Compose, use the following command:
+`docker-compose up --build`
+
+**Verify the Application is Running**
+Once the application is running, open your browser or use a tool like curl or Postman to interact with the API:
+
+`curl http://localhost:8000/docs`
